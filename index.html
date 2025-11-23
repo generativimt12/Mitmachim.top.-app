@@ -3,24 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>מתמחים טופ - שולחן עבודה</title>
+    <title>מתמחים טופ - OS</title>
     <style>
-        /* --- הגדרות בסיס ומשתנים --- */
+        /* --- הגדרות משתנים בסגנון Windows 11 --- */
         :root {
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #334155 100%);
-            --dock-bg: rgba(255, 255, 255, 0.15);
-            --glass-bg: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.2);
+            /* רקע הבלום המפורסם של ווינדוס 11 */
+            --desktop-bg: #000 url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop') no-repeat center center fixed;
+            --taskbar-bg: rgba(32, 32, 32, 0.75);
+            --start-menu-bg: rgba(32, 32, 32, 0.65);
+            --hover-bg: rgba(255, 255, 255, 0.08);
             --text-color: #ffffff;
-            --accent-color: #3b82f6;
-            --win-radius: 18px;
-            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            --accent-color: #60cdff; /* התכלת של ווינדוס */
+            --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+            --win-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
         }
 
         * {
             box-sizing: border-box;
             user-select: none;
-            -webkit-tap-highlight-color: transparent;
+            font-family: 'Segoe UI Variable', 'Segoe UI', sans-serif;
         }
 
         body {
@@ -28,461 +29,342 @@
             padding: 0;
             width: 100vw;
             height: 100vh;
-            background: var(--bg-gradient);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--desktop-bg);
+            background-size: cover;
             color: var(--text-color);
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* --- לוגו מתמחים טופ על הטפט --- */
+        #wallpaper-logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 0;
+            pointer-events: none; /* כדי שאפשר יהיה ללחוץ על דברים שמעליו */
         }
 
-        /* --- מסך ראשי / דסקטופ --- */
+        #wallpaper-logo h1 {
+            font-size: 5vw;
+            margin: 0;
+            background: linear-gradient(135deg, #fff 0%, #a5f3fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        #wallpaper-logo span {
+            font-size: 1.5vw;
+            opacity: 0.8;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* --- שולחן העבודה --- */
         #desktop {
             flex-grow: 1;
-            padding: 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-            grid-auto-rows: 110px;
-            gap: 15px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end; /* RTL icons alignment */
+            flex-wrap: wrap;
             align-content: flex-start;
             z-index: 1;
+            height: calc(100vh - 48px);
         }
 
-        /* --- אייקונים בשולחן העבודה --- */
-        .app-icon {
+        .desktop-icon {
+            width: 86px;
+            height: 100px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
-            border-radius: 12px;
-            padding: 10px;
+            justify-content: flex-start;
+            cursor: default;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            margin: 4px;
+            transition: background 0.1s;
         }
 
-        .app-icon:hover {
+        .desktop-icon:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .desktop-icon:active {
             background: rgba(255, 255, 255, 0.1);
-            transform: scale(1.05);
         }
 
-        .icon-box {
-            width: 52px;
-            height: 52px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #60a5fa, #2563eb);
+        .icon-img {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 5px;
+            font-size: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            margin-bottom: 8px;
-            color: white;
         }
 
-        /* גוונים שונים לאייקונים */
-        .icon-purple { background: linear-gradient(135deg, #a78bfa, #7c3aed); }
-        .icon-green { background: linear-gradient(135deg, #4ade80, #16a34a); }
-        .icon-orange { background: linear-gradient(135deg, #fbbf24, #d97706); }
-        .icon-red { background: linear-gradient(135deg, #f87171, #dc2626); }
-        .icon-gray { background: linear-gradient(135deg, #94a3b8, #475569); }
-
-        .app-name {
-            font-size: 13px;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+        .icon-label {
+            font-size: 12px;
             text-align: center;
+            line-height: 1.3;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+            color: white;
+            max-height: 34px;
+            overflow: hidden;
         }
 
-        /* --- שורת המשימות (Dock) --- */
-        #taskbar-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 10px;
-            z-index: 100;
-        }
-
-        #dock {
-            background: var(--dock-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            padding: 8px 12px;
-            border-radius: 20px;
+        /* --- שורת המשימות (Taskbar) --- */
+        #taskbar {
+            height: 48px;
+            background: var(--taskbar-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: var(--glass-border);
             display: flex;
             align-items: center;
-            gap: 12px;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-        }
-
-        .dock-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 10px;
-            background: rgba(255,255,255,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            cursor: pointer;
-            transition: transform 0.2s ease;
+            justify-content: space-between; /* פיזור בין התחלה, מרכז, ושעון */
+            padding: 0 15px;
+            z-index: 1000;
             position: relative;
         }
 
-        .dock-icon:hover {
-            transform: translateY(-8px) scale(1.1);
-            background: rgba(255,255,255,0.2);
-        }
-
-        .dock-icon::after {
-            content: '';
+        /* אזור מרכזי - אייקונים */
+        .taskbar-center {
             position: absolute;
-            bottom: -5px;
-            width: 4px;
-            height: 4px;
-            background: white;
-            border-radius: 50%;
-            opacity: 0;
-        }
-
-        .dock-icon.active::after {
-            opacity: 1;
-        }
-
-        /* כפתור התחל */
-        #start-btn {
-            background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Windows_11_logo.svg/1024px-Windows_11_logo.svg.png') no-repeat center center;
-            background-size: 60%;
-            background-color: rgba(255,255,255,0.9);
-        }
-
-        /* --- תפריט התחל / מגירת אפליקציות --- */
-        #start-menu {
-            position: fixed;
-            bottom: -100%; /* מוסתר */
             left: 50%;
             transform: translateX(-50%);
-            width: 600px;
-            max-width: 90vw;
-            height: 65vh;
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--win-radius);
-            transition: bottom 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
             display: flex;
-            flex-direction: column;
-            padding: 20px;
-            box-shadow: var(--shadow);
-            z-index: 99;
+            height: 100%;
+            gap: 6px;
+            padding: 4px 0;
         }
 
-        #start-menu.open {
-            bottom: 85px;
-        }
-
-        .search-bar {
-            background: rgba(0,0,0,0.3);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            padding: 10px 15px;
-            color: white;
-            margin-bottom: 20px;
+        .tb-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
         }
         
-        .search-bar input {
+        .tb-icon:hover {
+            background: var(--hover-bg);
+        }
+        
+        .tb-icon:active {
+            transform: scale(0.95);
+        }
+
+        /* קו כחול קטן מתחת לאפליקציה פתוחה */
+        .tb-icon.open::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            width: 12px;
+            height: 3px;
+            background: var(--accent-color);
+            border-radius: 2px;
+        }
+
+        /* אזור ימין - תפריטים נוספים (ריק בדוגמה זו) */
+        .taskbar-right { width: 100px; }
+
+        /* אזור שמאל - שעון (ב-RTL זה שמאל) */
+        .taskbar-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            height: 100%;
+            font-size: 12px;
+        }
+
+        .system-tray-area {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 0 8px;
+            height: 85%;
+            border-radius: 5px;
+            cursor: default;
+        }
+        
+        .system-tray-area:hover {
+            background: var(--hover-bg);
+        }
+
+        /* --- תפריט התחל (Start Menu) --- */
+        #start-menu {
+            position: absolute;
+            bottom: -800px; /* מוסתר התחלתית */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 640px;
+            height: 650px;
+            background: var(--start-menu-bg);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: var(--glass-border);
+            border-radius: 8px;
+            box-shadow: var(--win-shadow);
+            z-index: 999;
+            transition: bottom 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #start-menu.active {
+            bottom: 60px; /* מעל שורת המשימות */
+        }
+
+        .search-box {
+            background: #202020;
+            border: 1px solid #333;
+            border-radius: 4px;
+            border-bottom: 2px solid var(--accent-color);
+            padding: 8px 12px;
+            color: white;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .search-box input {
             background: transparent;
             border: none;
             color: white;
             width: 100%;
-            outline: none;
             margin-right: 10px;
-            font-size: 14px;
+            outline: none;
         }
 
-        .pinned-apps {
+        .pinned-grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
-            gap: 15px;
-            overflow-y: auto;
+            gap: 20px;
+            padding-bottom: 20px;
         }
 
-        .pinned-apps .app-icon {
-            transform: none !important;
+        .pinned-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
         }
         
-        .pinned-apps .app-icon:hover {
-             background: rgba(255,255,255,0.05);
-        }
+        .pinned-item:hover { background: var(--hover-bg); }
 
-        /* --- חלונות (מודאלים) --- */
-        .window {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.9);
-            width: 600px;
-            height: 400px;
-            background: #202020;
-            border: 1px solid #444;
-            border-radius: 10px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.2s ease;
+        .start-footer {
+            margin-top: auto;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 15px;
             display: flex;
-            flex-direction: column;
-            z-index: 200;
-            overflow: hidden;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .window.open {
-            opacity: 1;
-            pointer-events: all;
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        .title-bar {
-            height: 32px;
-            background: #333;
+        .user-profile {
             display: flex;
             align-items: center;
-            padding: 0 10px;
-            justify-content: space-between;
-        }
-
-        .window-controls span {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 6px;
+            gap: 10px;
+            padding: 5px 10px;
+            border-radius: 4px;
             cursor: pointer;
         }
-
-        .close-win { background: #ff5f56; }
-        .min-win { background: #ffbd2e; }
-        .max-win { background: #27c93f; }
-
-        .window-content {
-            flex: 1;
-            padding: 20px;
-            color: #ddd;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        
+        .user-profile:hover { background: var(--hover-bg); }
+        
+        .avatar {
+            width: 30px;
+            height: 30px;
+            background: orange;
+            border-radius: 50%;
             text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            color: #000;
         }
 
-        /* --- שעון ותאריך --- */
-        .system-tray {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            color: white;
-            text-align: left;
-            font-size: 12px;
-            background: rgba(0,0,0,0.2);
-            padding: 5px 10px;
-            border-radius: 8px;
-            backdrop-filter: blur(10px);
-        }
-
-        /* --- התאמות למובייל (Android 15 Style) --- */
+        /* --- התאמה למובייל --- */
         @media (max-width: 768px) {
-            #desktop {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 10px;
-                padding: 15px;
-            }
-
-            #dock {
-                width: 90%;
-                justify-content: space-around;
-                margin-bottom: 15px;
-            }
-            
             #start-menu {
-                width: 100vw;
-                height: 90vh;
+                width: 95%;
+                height: 80vh;
                 bottom: -100%;
-                border-radius: 20px 20px 0 0;
+                border-radius: 16px 16px 0 0;
             }
             
-            #start-menu.open {
+            #start-menu.active {
                 bottom: 0;
             }
-
-            .pinned-apps {
-                grid-template-columns: repeat(4, 1fr);
-            }
-
-            .window {
-                width: 90vw;
-                height: 60vh;
-            }
             
-            .system-tray {
-                top: 10px;
-                left: 20px;
-                bottom: auto;
-                background: transparent;
-                font-size: 14px;
-            }
+            .pinned-grid { grid-template-columns: repeat(4, 1fr); }
+            
+            #desktop { align-items: flex-start; flex-direction: row; }
+            
+            #wallpaper-logo h1 { font-size: 10vw; }
+            #wallpaper-logo span { font-size: 3vw; }
+            
+            .system-tray-area { display: none; } /* מסתירים שעון מלא במובייל לחסוך מקום */
         }
     </style>
 </head>
 <body>
 
-    <div class="system-tray">
-        <div id="clock-time" style="font-weight: bold; font-size: 1.2em;">12:00</div>
-        <div id="clock-date">יום ראשון, 1 ינואר</div>
+    <div id="wallpaper-logo">
+        <h1>מתמחים טופ</h1>
+        <span>מערכת ההפעלה לפיתוחים</span>
     </div>
 
     <div id="desktop">
         </div>
 
     <div id="start-menu">
-        <div class="search-bar">
-            <span style="margin-left:10px">🔍</span>
-            <input type="text" placeholder="חיפוש יישומים, פיתוחים והגדרות...">
+        <div class="search-box">
+            <span>🔍</span>
+            <input type="text" placeholder="הקלד כאן כדי לחפש...">
         </div>
-        <h4 style="margin: 0 0 15px 0; opacity: 0.7;">ננעצו לאחרונה</h4>
-        <div class="pinned-apps" id="menu-apps">
-            </div>
-    </div>
-
-    <div class="window" id="app-window">
-        <div class="title-bar">
-            <div class="window-title">אפליקציה</div>
-            <div class="window-controls">
-                <span class="close-win" onclick="closeWindow()"></span>
-                <span class="min-win"></span>
-                <span class="max-win"></span>
-            </div>
-        </div>
-        <div class="window-content" id="window-body">
-            <h2>תוכן האפליקציה</h2>
-            <p>כאן יוצג התוכן...</p>
-        </div>
-    </div>
-
-    <div id="taskbar-container">
-        <div id="dock">
-            <div class="dock-icon" id="start-btn" onclick="toggleStartMenu()"></div>
-            <div class="dock-icon" onclick="openApp('דפדפן', 'גלישה בטוחה ומהירה')">🌐</div>
-            <div class="dock-icon" onclick="openApp('קבצים', 'סייר הקבצים המתקדם')">📁</div>
-            <div class="dock-icon" onclick="openApp('חנות', 'חנות האפליקציות של מתמחים')">🛍️</div>
-            <div class="dock-icon" onclick="openApp('הגדרות', 'הגדרות מערכת וסינון')">⚙️</div>
-        </div>
-    </div>
-
-    <script>
-        // --- נתונים: אפליקציות מתמחים טופ ---
-        const apps = [
-            { name: "מדריכים", icon: "📚", color: "icon-box", desc: "מאגר המדריכים הגדול" },
-            { name: "פורום", icon: "💬", color: "icon-purple", desc: "דיונים ועזרה הדדית" },
-            { name: "דרייברים", icon: "💾", color: "icon-green", desc: "התקני חומרה מעודכנים" },
-            { name: "אופיס", icon: "📝", color: "icon-orange", desc: "כלי עבודה ופרודוקטיביות" },
-            { name: "סינון", icon: "🛡️", color: "icon-red", desc: "כלי הגנה וסינון תכנים" },
-            { name: "אנדרואיד", icon: "🤖", color: "icon-green", desc: "פיתוחים למכשירי אנדרואיד" },
-            { name: "מחשבון", icon: "🧮", color: "icon-gray", desc: "מחשבון מדעי מתקדם" },
-            { name: "גיבוי", icon: "☁️", color: "icon-box", desc: "גיבוי ענן מאובטח" },
-            { name: "עורך קוד", icon: "💻", color: "icon-purple", desc: "סביבת פיתוח ליוצרים" },
-            { name: "נגן", icon: "🎵", color: "icon-red", desc: "נגן אודיו מתקדם" },
-            { name: "תמונות", icon: "🖼️", color: "icon-orange", desc: "גלריה ועיצוב גרפי" },
-            { name: "עזרה", icon: "❓", color: "icon-gray", desc: "תמיכה מרחוק" },
-        ];
-
-        // --- יצירת אייקונים בשולחן העבודה ---
-        const desktop = document.getElementById('desktop');
-        const menuApps = document.getElementById('menu-apps');
-
-        apps.forEach(app => {
-            // יצירה לדסקטופ
-            let el = document.createElement('div');
-            el.className = 'app-icon';
-            el.onclick = () => openApp(app.name, app.desc);
-            el.innerHTML = `
-                <div class="${app.color} icon-box">${app.icon}</div>
-                <div class="app-name">${app.name}</div>
-            `;
-            desktop.appendChild(el);
-
-            // יצירה לתפריט התחל
-            let menuEl = el.cloneNode(true);
-            menuEl.onclick = () => {
-                toggleStartMenu();
-                openApp(app.name, app.desc);
-            };
-            menuApps.appendChild(menuEl);
-        });
-
-        // --- פונקציונליות ממשק ---
         
-        function toggleStartMenu() {
-            const menu = document.getElementById('start-menu');
-            const btn = document.getElementById('start-btn');
-            menu.classList.toggle('open');
-            btn.classList.toggle('active');
-        }
+        <div style="font-size: 14px; font-weight: 600; margin-bottom: 15px; padding-right: 5px;">מוצמדים</div>
+        <div class="pinned-grid" id="start-grid">
+            </div>
 
-        // סגירת תפריט התחל בלחיצה בחוץ
-        document.addEventListener('click', (e) => {
-            const menu = document.getElementById('start-menu');
-            const btn = document.getElementById('start-btn');
-            if (!menu.contains(e.target) && !btn.contains(e.target) && menu.classList.contains('open')) {
-                toggleStartMenu();
-            }
-        });
+        <div class="start-footer">
+            <div class="user-profile">
+                <div class="avatar">מ</div>
+                <span>משתמש מתמחים</span>
+            </div>
+            <div class="tb-icon" style="width:30px; height:30px; font-size:16px;">🔌</div>
+        </div>
+    </div>
 
-        // פתיחת חלון אפליקציה
-        function openApp(title, content) {
-            const win = document.getElementById('app-window');
-            const winTitle = win.querySelector('.window-title');
-            const winBody = document.getElementById('window-body');
+    <div id="taskbar">
+        <div class="taskbar-right"></div>
 
-            winTitle.innerText = title;
-            winBody.innerHTML = `
-                <div style="font-size: 60px; margin-bottom: 20px;">🚀</div>
-                <h2>${title}</h2>
-                <p style="font-size: 1.2em; opacity: 0.8;">${content}</p>
-                <div style="margin-top: 30px; padding: 10px 20px; background: #3b82f6; border-radius: 8px; cursor: pointer;">התחל עבודה</div>
-            `;
+        <div class="taskbar-center">
+            <div class="tb-icon" id="start-btn" onclick="toggleStart()">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Windows_11_logo.svg/1024px-Windows_11_logo.svg.png" alt="Start" width="24" height="24">
+            </div>
             
-            win.classList.add('open');
-        }
-
-        function closeWindow() {
-            document.getElementById('app-window').classList.remove('open');
-        }
-
-        // --- שעון ותאריך ---
-        function updateClock() {
-            const now = new Date();
-            const timeStr = now.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' });
-            const dateStr = now.toLocaleDateString('he-IL', { weekday: 'long', day: 'numeric', month: 'long' });
-            
-            document.getElementById('clock-time').innerText = timeStr;
-            document.getElementById('clock-date').innerText = dateStr;
-        }
-        
-        setInterval(updateClock, 1000);
-        updateClock();
-
-    </script>
-</body>
-</html>
-
+            <div class="tb-icon open" title="דפדפן">🌍</div>
+            <div class="tb-icon" title="סייר הקבצים">📁</div>
+            <div class="tb-icon" title="חנות">🛍️</div>
+            <div class="tb-icon" title="פורום">💬</div>
+        </div>
