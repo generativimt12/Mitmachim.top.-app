@@ -86,7 +86,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            cursor: default;
+            cursor: pointer;
             border: 1px solid transparent;
             border-radius: 4px;
             margin: 4px;
@@ -365,6 +365,109 @@
             
             <div class="tb-icon open" title="דפדפן">🌍</div>
             <div class="tb-icon" title="סייר הקבצים">📁</div>
-            <div class="tb-icon" title="חנות">🛍️</div>
+            <div class="tb-icon" title="פתקים">🗒️</div>
             <div class="tb-icon" title="פורום">💬</div>
         </div>
+
+        <div class="taskbar-left">
+            <div style="font-size: 16px;">🛡️</div>
+            <div style="font-size: 16px;">📶</div>
+            <div style="font-size: 16px;">🔊</div>
+            <div class="system-tray-area">
+                <div id="clock-time">12:00</div>
+                <div id="clock-date">01/01/2025</div>
+            </div>
+            <div style="width: 5px; border-left: 1px solid #555; height: 20px; margin-right: 5px;"></div>
+        </div>
+    </div>
+
+    <script>
+        // רשימת האפליקציות (מודל נתונים)
+        const apps = [
+            { name: "סל המיחזור", icon: "🗑️", type: "desktop" },
+            { name: "המחשב שלי", icon: "💻", type: "desktop" },
+            { name: "פתקים", icon: "🗒️", type: "both", link: "https://ptakim-gemini.netlify.app/" }, // האפליקציה החדשה
+            { name: "מדריכים", icon: "📚", type: "both" },
+            { name: "דפדפן כרום", icon: "🌍", type: "both" },
+            { name: "פורום מתמחים", icon: "💬", type: "both" },
+            { name: "דרייברים", icon: "💾", type: "start" },
+            { name: "הגדרות", icon: "⚙️", type: "start" },
+            { name: "תמונות", icon: "🖼️", type: "start" },
+            { name: "מחשבון", icon: "🧮", type: "start" },
+            { name: "חנות", icon: "🛍️", type: "start" },
+            { name: "נגן מוזיקה", icon: "🎵", type: "start" },
+            { name: "Word", icon: "📝", type: "start" },
+        ];
+
+        const desktopEl = document.getElementById('desktop');
+        const startGridEl = document.getElementById('start-grid');
+        const startMenu = document.getElementById('start-menu');
+
+        // פונקציה לפתיחת קישור או הצגת הודעת ברירת מחדל
+        function openApp(app) {
+            if (app.link) {
+                // פותח קישור חיצוני בכרטיסייה חדשה
+                window.open(app.link, '_blank');
+            } else {
+                // פתיחת חלון סימולציה (אם אין קישור חיצוני)
+                alert(`פתיחת: ${app.name}\n(יישום זה הינו סימולציה בלבד)`);
+            }
+            toggleStart(false); // סוגר את תפריט ההתחל אם פתוח
+        }
+
+        // פונקציה ליצירת אלמנטים
+        apps.forEach(app => {
+            // יצירה לשולחן העבודה
+            if (app.type === 'desktop' || app.type === 'both') {
+                let el = document.createElement('div');
+                el.className = 'desktop-icon';
+                el.onclick = () => openApp(app);
+                el.innerHTML = `
+                    <div class="icon-img">${app.icon}</div>
+                    <div class="icon-label">${app.name}</div>
+                `;
+                desktopEl.appendChild(el);
+            }
+
+            // יצירה לתפריט התחל
+            if (app.type === 'start' || app.type === 'both') {
+                let el = document.createElement('div');
+                el.className = 'pinned-item';
+                el.onclick = () => openApp(app);
+                el.innerHTML = `
+                    <div class="icon-img" style="background: ${app.icon === '🗒️' ? '#60cdff' : '#222'}; width:48px; height:48px; border-radius:8px; font-size:24px;">${app.icon}</div>
+                    <div style="font-size:12px; margin-top:5px; color:#eee;">${app.name}</div>
+                `;
+                startGridEl.appendChild(el);
+            }
+        });
+
+        // לוגיקת תפריט התחל
+        function toggleStart(shouldToggle = true) {
+            if (shouldToggle) {
+                startMenu.classList.toggle('active');
+            } else {
+                startMenu.classList.remove('active');
+            }
+        }
+
+        // סגירה בלחיצה בחוץ
+        document.addEventListener('click', (e) => {
+            const btn = document.getElementById('start-btn');
+            if (!startMenu.contains(e.target) && !btn.contains(e.target)) {
+                toggleStart(false);
+            }
+        });
+
+        // שעון חי
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('clock-time').innerText = now.toLocaleTimeString('he-IL', {hour:'2-digit', minute:'2-digit'});
+            document.getElementById('clock-date').innerText = now.toLocaleDateString('he-IL', {day:'2-digit', month:'2-digit', year:'numeric'});
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+    </script>
+</body>
+</html>
