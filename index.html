@@ -3,326 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>מתמחים טופ - OS</title>
+    <title>מתמחים טופ - OS 2.0</title>
     <style>
-        /* --- הגדרות משתנים בסגנון Windows 11 --- */
+        /* --- הגדרות בסיס (כמו מקודם) --- */
         :root {
-            /* רקע הבלום המפורסם של ווינדוס 11 */
             --desktop-bg: #000 url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop') no-repeat center center fixed;
-            --taskbar-bg: rgba(32, 32, 32, 0.75);
-            --start-menu-bg: rgba(32, 32, 32, 0.65);
-            --hover-bg: rgba(255, 255, 255, 0.08);
+            --taskbar-bg: rgba(32, 32, 32, 0.85);
+            --window-bg: #f3f3f3;
             --text-color: #ffffff;
-            --accent-color: #60cdff; /* התכלת של ווינדוס */
-            --glass-border: 1px solid rgba(255, 255, 255, 0.08);
-            --win-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            --accent-color: #60cdff;
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        * {
-            box-sizing: border-box;
-            user-select: none;
-            font-family: 'Segoe UI Variable', 'Segoe UI', sans-serif;
-        }
+        * { box-sizing: border-box; user-select: none; font-family: 'Segoe UI Variable', 'Segoe UI', sans-serif; }
+        body { margin: 0; padding: 0; width: 100vw; height: 100vh; background: var(--desktop-bg); background-size: cover; color: var(--text-color); overflow: hidden; display: flex; flex-direction: column; }
 
-        body {
-            margin: 0;
-            padding: 0;
-            width: 100vw;
-            height: 100vh;
-            background: var(--desktop-bg);
-            background-size: cover;
-            color: var(--text-color);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* --- לוגו מתמחים טופ על הטפט --- */
-        #wallpaper-logo {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            z-index: 0;
-            pointer-events: none; /* כדי שאפשר יהיה ללחוץ על דברים שמעליו */
-        }
-
-        #wallpaper-logo h1 {
-            font-size: 5vw;
-            margin: 0;
-            background: linear-gradient(135deg, #fff 0%, #a5f3fc 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            font-weight: 800;
-            letter-spacing: -1px;
-        }
-
-        #wallpaper-logo span {
-            font-size: 1.5vw;
-            opacity: 0.8;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
+        /* --- לוגו רקע --- */
+        #wallpaper-logo { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 0; pointer-events: none; }
+        #wallpaper-logo h1 { font-size: 5vw; margin: 0; background: linear-gradient(135deg, #fff 0%, #a5f3fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 10px 30px rgba(0,0,0,0.3); font-weight: 800; }
+        #wallpaper-logo span { font-size: 1.5vw; opacity: 0.8; letter-spacing: 2px; text-transform: uppercase; }
 
         /* --- שולחן העבודה --- */
-        #desktop {
-            flex-grow: 1;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end; /* RTL icons alignment */
-            flex-wrap: wrap;
-            align-content: flex-start;
-            z-index: 1;
-            height: calc(100vh - 48px);
-        }
+        #desktop { flex-grow: 1; padding: 10px; display: flex; flex-direction: column; align-items: flex-end; flex-wrap: wrap; align-content: flex-start; z-index: 1; height: calc(100vh - 48px); position: relative; }
+        .desktop-icon { width: 86px; height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; cursor: pointer; border: 1px solid transparent; border-radius: 4px; margin: 4px; transition: background 0.1s; }
+        .desktop-icon:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
+        .icon-img { width: 48px; height: 48px; margin-bottom: 5px; font-size: 36px; display: flex; align-items: center; justify-content: center; }
+        .icon-label { font-size: 12px; text-align: center; text-shadow: 0 1px 2px rgba(0,0,0,0.8); color: white; overflow: hidden; }
 
-        .desktop-icon {
-            width: 86px;
-            height: 100px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            cursor: pointer;
-            border: 1px solid transparent;
-            border-radius: 4px;
-            margin: 4px;
-            transition: background 0.1s;
-        }
-
-        .desktop-icon:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .desktop-icon:active {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .icon-img {
-            width: 48px;
-            height: 48px;
-            margin-bottom: 5px;
-            font-size: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .icon-label {
-            font-size: 12px;
-            text-align: center;
-            line-height: 1.3;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
-            color: white;
-            max-height: 34px;
-            overflow: hidden;
-        }
-
-        /* --- שורת המשימות (Taskbar) --- */
-        #taskbar {
-            height: 48px;
-            background: var(--taskbar-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-top: var(--glass-border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between; /* פיזור בין התחלה, מרכז, ושעון */
-            padding: 0 15px;
-            z-index: 1000;
-            position: relative;
-        }
-
-        /* אזור מרכזי - אייקונים */
-        .taskbar-center {
+        /* --- מערכת חלונות (Windows) --- */
+        .window {
             position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            height: 100%;
-            gap: 6px;
-            padding: 4px 0;
-        }
-
-        .tb-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-        
-        .tb-icon:hover {
-            background: var(--hover-bg);
-        }
-        
-        .tb-icon:active {
-            transform: scale(0.95);
-        }
-
-        /* קו כחול קטן מתחת לאפליקציה פתוחה */
-        .tb-icon.open::after {
-            content: '';
-            position: absolute;
-            bottom: 2px;
-            width: 12px;
-            height: 3px;
-            background: var(--accent-color);
-            border-radius: 2px;
-        }
-
-        /* אזור ימין - תפריטים נוספים (ריק בדוגמה זו) */
-        .taskbar-right { width: 100px; }
-
-        /* אזור שמאל - שעון (ב-RTL זה שמאל) */
-        .taskbar-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            height: 100%;
-            font-size: 12px;
-        }
-
-        .system-tray-area {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            justify-content: center;
-            padding: 0 8px;
-            height: 85%;
-            border-radius: 5px;
-            cursor: default;
-        }
-        
-        .system-tray-area:hover {
-            background: var(--hover-bg);
-        }
-
-        /* --- תפריט התחל (Start Menu) --- */
-        #start-menu {
-            position: absolute;
-            bottom: -800px; /* מוסתר התחלתית */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 640px;
-            height: 650px;
-            background: var(--start-menu-bg);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: var(--glass-border);
+            top: 50px; left: 100px;
+            width: 900px; height: 600px;
+            background: var(--window-bg);
             border-radius: 8px;
-            box-shadow: var(--win-shadow);
-            z-index: 999;
-            transition: bottom 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
-            padding: 24px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
             display: flex;
             flex-direction: column;
+            overflow: hidden;
+            z-index: 100;
+            border: 1px solid rgba(0,0,0,0.1);
+            resize: both; /* מאפשר שינוי גודל */
+            animation: popIn 0.2s cubic-bezier(0.1, 0.9, 0.2, 1);
+            color: #000;
+            user-select: auto; /* מאפשר בחירת טקסט בתוך החלון */
         }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
-        #start-menu.active {
-            bottom: 60px; /* מעל שורת המשימות */
-        }
-
-        .search-box {
-            background: #202020;
-            border: 1px solid #333;
-            border-radius: 4px;
-            border-bottom: 2px solid var(--accent-color);
-            padding: 8px 12px;
-            color: white;
+        .title-bar {
+            height: 32px;
+            background: #fff;
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .search-box input {
-            background: transparent;
-            border: none;
-            color: white;
-            width: 100%;
-            margin-right: 10px;
-            outline: none;
-        }
-
-        .pinned-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 20px;
-            padding-bottom: 20px;
-        }
-
-        .pinned-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 4px;
-        }
-        
-        .pinned-item:hover { background: var(--hover-bg); }
-
-        .start-footer {
-            margin-top: auto;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 15px;
-            display: flex;
             justify-content: space-between;
-            align-items: center;
+            padding: 0 10px;
+            border-bottom: 1px solid #e0e0e0;
+            user-select: none;
         }
+        .title-drag-area { flex-grow: 1; height: 100%; display: flex; align-items: center; font-size: 12px; padding-right: 10px; cursor: default; }
+        .window-controls { display: flex; gap: 5px; }
+        .win-btn { width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 4px; font-size: 14px; }
+        .win-btn:hover { background: #eee; }
+        .win-btn.close:hover { background: #e81123; color: white; }
 
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
+        /* --- אפליקציית וורד (Word Clone) --- */
+        .word-app { display: flex; flex-direction: column; height: 100%; background: #f3f3f3; }
+        
+        /* ה-Ribbon (סרגל כלים) */
+        .ribbon-tabs { display: flex; background: #2b579a; color: white; padding-top: 5px; }
+        .ribbon-tab { padding: 5px 15px; cursor: pointer; font-size: 13px; border-radius: 4px 4px 0 0; margin-left: 2px; }
+        .ribbon-tab.active { background: #f3f3f3; color: #2b579a; font-weight: bold; }
+        
+        .ribbon-toolbar { height: 90px; background: #f3f3f3; border-bottom: 1px solid #ddd; display: flex; padding: 5px; gap: 10px; align-items: center; overflow-x: auto; }
+        .tool-group { display: flex; gap: 2px; border-left: 1px solid #ddd; padding-left: 5px; align-items: center; }
+        .tool-btn { 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            width: 45px; height: 70px; cursor: pointer; border-radius: 3px; font-size: 11px; text-align: center; padding: 2px;
         }
-        
-        .user-profile:hover { background: var(--hover-bg); }
-        
-        .avatar {
-            width: 30px;
-            height: 30px;
-            background: orange;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 30px;
-            font-weight: bold;
+        .tool-btn:hover { background: #cde6f7; border: 1px solid #a6d8f5; }
+        .tool-icon { font-size: 20px; margin-bottom: 2px; }
+        .tool-small-group { display: flex; flex-direction: column; gap: 2px; }
+        .tool-btn-small { width: 30px; height: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 2px; }
+        .tool-btn-small:hover { background: #cde6f7; }
+
+        /* אזור העריכה */
+        .editor-area { flex-grow: 1; background: #eef1f5; padding: 20px; overflow-y: auto; display: flex; justify-content: center; position: relative; }
+        .word-page {
+            width: 794px; /* A4 width in pixels approx */
+            min-height: 1123px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 96px; /* Margins */
+            outline: none;
+            cursor: text;
+            direction: rtl;
+            font-size: 16px;
+            line-height: 1.5;
             color: #000;
         }
+        
+        /* אלמנטים בתוך המסמך */
+        .word-page table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+        .word-page td, .word-page th { border: 1px solid #000; padding: 5px; min-width: 50px; }
+        .word-page img { max-width: 100%; height: auto; resize: both; border: 1px dashed transparent; }
+        .word-page img:hover { border: 1px dashed #999; }
+        
+        .status-bar { height: 24px; background: #2b579a; color: white; display: flex; align-items: center; padding: 0 10px; font-size: 12px; justify-content: space-between; }
 
-        /* --- התאמה למובייל --- */
+        /* --- תפריט התחל ושורת משימות (קוד קיים) --- */
+        #taskbar { height: 48px; background: var(--taskbar-bg); backdrop-filter: blur(20px); border-top: var(--glass-border); display: flex; align-items: center; justify-content: space-between; padding: 0 15px; z-index: 1000; position: relative; }
+        .taskbar-center { position: absolute; left: 50%; transform: translateX(-50%); display: flex; height: 100%; gap: 6px; padding: 4px 0; }
+        .tb-icon { width: 40px; height: 40px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; transition: all 0.2s; position: relative; }
+        .tb-icon:hover { background: rgba(255,255,255,0.1); }
+        .tb-icon:active { transform: scale(0.95); }
+        .tb-icon.open::after { content: ''; position: absolute; bottom: 2px; width: 12px; height: 3px; background: var(--accent-color); border-radius: 2px; }
+        .taskbar-left { display: flex; align-items: center; gap: 10px; height: 100%; font-size: 12px; }
+        .system-tray-area { display: flex; flex-direction: column; align-items: flex-end; justify-content: center; padding: 0 8px; height: 85%; border-radius: 5px; }
+
+        #start-menu { position: absolute; bottom: -800px; left: 50%; transform: translateX(-50%); width: 640px; height: 650px; background: rgba(32, 32, 32, 0.95); border: var(--glass-border); border-radius: 8px; box-shadow: var(--win-shadow); z-index: 999; transition: bottom 0.3s; padding: 24px; display: flex; flex-direction: column; color: white; }
+        #start-menu.active { bottom: 60px; }
+        .search-box { background: #202020; border: 1px solid #333; border-radius: 4px; border-bottom: 2px solid var(--accent-color); padding: 8px 12px; color: white; display: flex; align-items: center; margin-bottom: 20px; }
+        .search-box input { background: transparent; border: none; color: white; width: 100%; margin-right: 10px; outline: none; }
+        .pinned-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 20px; padding-bottom: 20px; }
+        .pinned-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; padding: 8px; border-radius: 4px; }
+        .pinned-item:hover { background: rgba(255,255,255,0.1); }
+        .start-footer { margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; display: flex; justify-content: space-between; align-items: center; }
+
         @media (max-width: 768px) {
-            #start-menu {
-                width: 95%;
-                height: 80vh;
-                bottom: -100%;
-                border-radius: 16px 16px 0 0;
-            }
-            
-            #start-menu.active {
-                bottom: 0;
-            }
-            
+            #start-menu { width: 95%; height: 80vh; border-radius: 16px 16px 0 0; }
+            #start-menu.active { bottom: 0; }
             .pinned-grid { grid-template-columns: repeat(4, 1fr); }
-            
             #desktop { align-items: flex-start; flex-direction: row; }
-            
-            #wallpaper-logo h1 { font-size: 10vw; }
-            #wallpaper-logo span { font-size: 3vw; }
-            
-            .system-tray-area { display: none; } /* מסתירים שעון מלא במובייל לחסוך מקום */
+            .window { width: 100% !important; height: calc(100vh - 48px) !important; top: 0 !important; left: 0 !important; border-radius: 0; }
         }
     </style>
 </head>
@@ -333,22 +145,20 @@
         <span>מערכת ההפעלה לפיתוחים</span>
     </div>
 
-    <div id="desktop">
-        </div>
+    <div id="windows-container"></div>
+
+    <div id="desktop"></div>
 
     <div id="start-menu">
         <div class="search-box">
             <span>🔍</span>
             <input type="text" placeholder="הקלד כאן כדי לחפש...">
         </div>
-        
         <div style="font-size: 14px; font-weight: 600; margin-bottom: 15px; padding-right: 5px;">מוצמדים</div>
-        <div class="pinned-grid" id="start-grid">
-            </div>
-
+        <div class="pinned-grid" id="start-grid"></div>
         <div class="start-footer">
-            <div class="user-profile">
-                <div class="avatar">מ</div>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <div style="width:30px; height:30px; background:orange; border-radius:50%; text-align:center; line-height:30px; font-weight:bold; color:#000;">מ</div>
                 <span>משתמש מתמחים</span>
             </div>
             <div class="tb-icon" style="width:30px; height:30px; font-size:16px;">🔌</div>
@@ -357,117 +167,314 @@
 
     <div id="taskbar">
         <div class="taskbar-right"></div>
-
         <div class="taskbar-center">
             <div class="tb-icon" id="start-btn" onclick="toggleStart()">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Windows_11_logo.svg/1024px-Windows_11_logo.svg.png" alt="Start" width="24" height="24">
             </div>
-            
-            <div class="tb-icon open" title="דפדפן">🌍</div>
+            <div class="tb-icon" onclick="openApp(apps.find(a=>a.name==='Word'))" title="Word">📝</div>
+            <div class="tb-icon" title="דפדפן">🌍</div>
             <div class="tb-icon" title="סייר הקבצים">📁</div>
-            <div class="tb-icon" title="פתקים">🗒️</div>
-            <div class="tb-icon" title="פורום">💬</div>
         </div>
-
         <div class="taskbar-left">
             <div style="font-size: 16px;">🛡️</div>
             <div style="font-size: 16px;">📶</div>
-            <div style="font-size: 16px;">🔊</div>
             <div class="system-tray-area">
                 <div id="clock-time">12:00</div>
                 <div id="clock-date">01/01/2025</div>
             </div>
-            <div style="width: 5px; border-left: 1px solid #555; height: 20px; margin-right: 5px;"></div>
         </div>
     </div>
 
+    <input type="file" id="img-upload" style="display: none;" accept="image/*">
+
     <script>
-        // רשימת האפליקציות (מודל נתונים)
+        // --- נתונים ---
         const apps = [
+            { name: "Word", icon: "📝", type: "both", action: "word" }, // אפליקציית הדגל שלנו
             { name: "סל המיחזור", icon: "🗑️", type: "desktop" },
             { name: "המחשב שלי", icon: "💻", type: "desktop" },
-            { name: "פתקים", icon: "🗒️", type: "both", link: "https://ptakim-gemini.netlify.app/" }, // האפליקציה החדשה
-            { name: "מדריכים", icon: "📚", type: "both" },
+            { name: "פתקים", icon: "🗒️", type: "both", link: "https://ptakim-gemini.netlify.app/" },
             { name: "דפדפן כרום", icon: "🌍", type: "both" },
             { name: "פורום מתמחים", icon: "💬", type: "both" },
             { name: "דרייברים", icon: "💾", type: "start" },
             { name: "הגדרות", icon: "⚙️", type: "start" },
             { name: "תמונות", icon: "🖼️", type: "start" },
             { name: "מחשבון", icon: "🧮", type: "start" },
-            { name: "חנות", icon: "🛍️", type: "start" },
-            { name: "נגן מוזיקה", icon: "🎵", type: "start" },
-            { name: "Word", icon: "📝", type: "start" },
         ];
 
+        // --- אתחול הממשק ---
         const desktopEl = document.getElementById('desktop');
         const startGridEl = document.getElementById('start-grid');
         const startMenu = document.getElementById('start-menu');
+        const windowsContainer = document.getElementById('windows-container');
 
-        // פונקציה לפתיחת קישור או הצגת הודעת ברירת מחדל
-        function openApp(app) {
-            if (app.link) {
-                // פותח קישור חיצוני בכרטיסייה חדשה
-                window.open(app.link, '_blank');
-            } else {
-                // פתיחת חלון סימולציה (אם אין קישור חיצוני)
-                alert(`פתיחת: ${app.name}\n(יישום זה הינו סימולציה בלבד)`);
-            }
-            toggleStart(false); // סוגר את תפריט ההתחל אם פתוח
-        }
-
-        // פונקציה ליצירת אלמנטים
         apps.forEach(app => {
-            // יצירה לשולחן העבודה
             if (app.type === 'desktop' || app.type === 'both') {
                 let el = document.createElement('div');
                 el.className = 'desktop-icon';
                 el.onclick = () => openApp(app);
-                el.innerHTML = `
-                    <div class="icon-img">${app.icon}</div>
-                    <div class="icon-label">${app.name}</div>
-                `;
+                el.innerHTML = `<div class="icon-img">${app.icon}</div><div class="icon-label">${app.name}</div>`;
                 desktopEl.appendChild(el);
             }
-
-            // יצירה לתפריט התחל
             if (app.type === 'start' || app.type === 'both') {
                 let el = document.createElement('div');
                 el.className = 'pinned-item';
                 el.onclick = () => openApp(app);
-                el.innerHTML = `
-                    <div class="icon-img" style="background: ${app.icon === '🗒️' ? '#60cdff' : '#222'}; width:48px; height:48px; border-radius:8px; font-size:24px;">${app.icon}</div>
-                    <div style="font-size:12px; margin-top:5px; color:#eee;">${app.name}</div>
-                `;
+                el.innerHTML = `<div class="icon-img" style="background:${app.name==='Word'?'#2b579a':'#222'}; width:48px; height:48px; border-radius:8px; font-size:24px;">${app.icon}</div><div style="font-size:12px; margin-top:5px; color:#eee;">${app.name}</div>`;
                 startGridEl.appendChild(el);
             }
         });
 
-        // לוגיקת תפריט התחל
-        function toggleStart(shouldToggle = true) {
-            if (shouldToggle) {
-                startMenu.classList.toggle('active');
+        // --- לוגיקת חלונות ---
+        let highestZ = 100;
+
+        function openApp(app) {
+            toggleStart(false);
+            
+            if (app.action === 'word') {
+                openWordWindow();
+                return;
+            }
+
+            if (app.link) {
+                window.open(app.link, '_blank');
             } else {
-                startMenu.classList.remove('active');
+                alert(`פתיחת: ${app.name}\n(יישום זה הינו סימולציה בלבד)`);
             }
         }
 
-        // סגירה בלחיצה בחוץ
-        document.addEventListener('click', (e) => {
-            const btn = document.getElementById('start-btn');
-            if (!startMenu.contains(e.target) && !btn.contains(e.target)) {
-                toggleStart(false);
+        function openWordWindow() {
+            // יצירת אלמנט חלון
+            const winId = 'win-' + Date.now();
+            const win = document.createElement('div');
+            win.className = 'window';
+            win.id = winId;
+            win.style.zIndex = ++highestZ;
+            
+            // תוכן ה-HTML של וורד
+            win.innerHTML = `
+                <div class="title-bar" onmousedown="startDrag(event, '${winId}')">
+                    <div class="title-drag-area">📄 מסמך 1 - Word (מצב תאימות)</div>
+                    <div class="window-controls">
+                        <div class="win-btn" onclick="minimizeWindow('${winId}')">_</div>
+                        <div class="win-btn" onclick="maximizeWindow('${winId}')">□</div>
+                        <div class="win-btn close" onclick="closeWindow('${winId}')">✕</div>
+                    </div>
+                </div>
+                
+                <div class="word-app">
+                    <div class="ribbon-tabs">
+                        <div class="ribbon-tab active" onclick="switchTab(this, 'home')">בית</div>
+                        <div class="ribbon-tab" onclick="switchTab(this, 'insert')">הוספה</div>
+                        <div class="ribbon-tab" onclick="switchTab(this, 'file')">קובץ</div>
+                    </div>
+                    
+                    <div class="ribbon-toolbar" id="toolbar-home">
+                        <div class="tool-group">
+                            <div class="tool-btn" onclick="execCmd('paste')"><div class="tool-icon">📋</div>הדבק</div>
+                        </div>
+                        <div class="tool-group">
+                            <div class="tool-btn-small" onclick="execCmd('bold')" title="מודגש"><b>B</b></div>
+                            <div class="tool-btn-small" onclick="execCmd('italic')" title="נטוי"><i>I</i></div>
+                            <div class="tool-btn-small" onclick="execCmd('underline')" title="קו תחתון"><u>U</u></div>
+                            <div class="tool-btn-small" onclick="execCmd('strikeThrough')" title="קו חוצה"><s>abc</s></div>
+                        </div>
+                        <div class="tool-group">
+                             <select onchange="execCmd('fontSize', this.value)" style="margin:5px;">
+                                <option value="3">רגיל</option>
+                                <option value="5">גדול</option>
+                                <option value="7">ענק</option>
+                            </select>
+                            <div class="tool-btn-small" onclick="execCmd('foreColor', prompt('בחר צבע (באנגלית או HEX):', 'red'))" title="צבע טקסט">A</div>
+                            <div class="tool-btn-small" onclick="execCmd('hiliteColor', 'yellow')" title="מרקר">🖊️</div>
+                        </div>
+                        <div class="tool-group">
+                            <div class="tool-btn-small" onclick="execCmd('justifyRight')">RTL</div>
+                            <div class="tool-btn-small" onclick="execCmd('justifyCenter')">מרכז</div>
+                            <div class="tool-btn-small" onclick="execCmd('justifyLeft')">LTR</div>
+                        </div>
+                         <div class="tool-group">
+                             <div class="tool-btn" onclick="execCmd('insertUnorderedList')"><div class="tool-icon">•</div>רשימה</div>
+                             <div class="tool-btn" onclick="execCmd('insertOrderedList')"><div class="tool-icon">1.</div>מספור</div>
+                        </div>
+                    </div>
+
+                    <div class="ribbon-toolbar" id="toolbar-insert" style="display:none;">
+                         <div class="tool-group">
+                            <div class="tool-btn" onclick="triggerImgUpload()"><div class="tool-icon">🖼️</div>תמונה</div>
+                            <div class="tool-btn" onclick="insertTable()"><div class="tool-icon">▦</div>טבלה</div>
+                            <div class="tool-btn" onclick="execCmd('insertHorizontalRule')"><div class="tool-icon">➖</div>קו</div>
+                        </div>
+                    </div>
+
+                    <div class="ribbon-toolbar" id="toolbar-file" style="display:none;">
+                         <div class="tool-group">
+                            <div class="tool-btn" onclick="saveDoc('html')"><div class="tool-icon">💾</div>שמור</div>
+                            <div class="tool-btn" onclick="saveDoc('txt')"><div class="tool-icon">📝</div>TXT</div>
+                            <div class="tool-btn" onclick="window.print()"><div class="tool-icon">🖨️</div>הדפס</div>
+                        </div>
+                    </div>
+
+                    <div class="editor-area">
+                        <div class="word-page" contenteditable="true" spellcheck="false">
+                            <h1>כותרת ראשית</h1>
+                            <p>התחל לכתוב כאן... זהו מסמך המדמה את וורד.</p>
+                            <p>ניתן להוסיף תמונות, טבלאות ולעצב את הטקסט.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="status-bar">
+                        <span>עמוד 1 מתוך 1</span>
+                        <span>עברית</span>
+                        <span>100% - +</span>
+                    </div>
+                </div>
+            `;
+            
+            windowsContainer.appendChild(win);
+            
+            // הבאת חלון לקדמה בלחיצה
+            win.onmousedown = () => { win.style.zIndex = ++highestZ; };
+        }
+
+        // --- פונקציות וורד (Editor Logic) ---
+        function switchTab(tabEl, tabName) {
+            // UI Switch
+            document.querySelectorAll('.ribbon-tab').forEach(t => t.classList.remove('active'));
+            tabEl.classList.add('active');
+            
+            // Toolbar Switch
+            document.getElementById('toolbar-home').style.display = 'none';
+            document.getElementById('toolbar-insert').style.display = 'none';
+            document.getElementById('toolbar-file').style.display = 'none';
+            
+            document.getElementById(`toolbar-${tabName}`).style.display = 'flex';
+        }
+
+        function execCmd(command, value = null) {
+            document.execCommand(command, false, value);
+            // פוקוס חזרה לדף
+            document.querySelector('.word-page').focus();
+        }
+
+        function triggerImgUpload() {
+            document.getElementById('img-upload').click();
+        }
+
+        // האזנה להעלאת תמונה
+        document.getElementById('img-upload').addEventListener('change', function(e) {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    execCmd('insertImage', e.target.result);
+                };
+                reader.readAsDataURL(this.files[0]);
             }
         });
 
-        // שעון חי
+        function insertTable() {
+            const rows = prompt("כמה שורות?", "3");
+            const cols = prompt("כמה עמודות?", "3");
+            if (rows && cols) {
+                let html = '<table border="1" style="width:100%; border-collapse: collapse;">';
+                for(let i=0; i<rows; i++) {
+                    html += '<tr>';
+                    for(let j=0; j<cols; j++) {
+                        html += '<td>טקסט</td>';
+                    }
+                    html += '</tr>';
+                }
+                html += '</table><br>';
+                execCmd('insertHTML', html);
+            }
+        }
+
+        function saveDoc(type) {
+            const content = document.querySelector('.word-page').innerHTML;
+            let blob, filename;
+            
+            if (type === 'html') {
+                const fullHtml = `
+                    <html dir="rtl"><head><meta charset="utf-8"><title>מסמך</title></head>
+                    <body>${content}</body></html>`;
+                blob = new Blob([fullHtml], {type: "text/html;charset=utf-8"});
+                filename = "document.html";
+            } else {
+                const text = document.querySelector('.word-page').innerText;
+                blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+                filename = "document.txt";
+            }
+
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+        }
+
+        // --- פונקציות ניהול חלונות ---
+        let isDragging = false;
+        let startX, startY, initialLeft, initialTop;
+        let currentWinId = null;
+
+        function startDrag(e, winId) {
+            if (e.target.className.includes('win-btn')) return; // שלא יגרור אם לוחצים על כפתור סגירה
+            isDragging = true;
+            currentWinId = winId;
+            const win = document.getElementById(winId);
+            
+            startX = e.clientX;
+            startY = e.clientY;
+            
+            const rect = win.getBoundingClientRect();
+            initialLeft = rect.left;
+            initialTop = rect.top;
+
+            document.addEventListener('mousemove', dragWindow);
+            document.addEventListener('mouseup', stopDrag);
+        }
+
+        function dragWindow(e) {
+            if (!isDragging) return;
+            const dx = e.clientX - startX;
+            const dy = e.clientY - startY;
+            const win = document.getElementById(currentWinId);
+            
+            win.style.left = `${initialLeft + dx}px`;
+            win.style.top = `${initialTop + dy}px`;
+            win.style.transform = 'none'; // ביטול ה-centering של CSS אם יש
+        }
+
+        function stopDrag() {
+            isDragging = false;
+            document.removeEventListener('mousemove', dragWindow);
+            document.removeEventListener('mouseup', stopDrag);
+        }
+
+        function closeWindow(id) { document.getElementById(id).remove(); }
+        function minimizeWindow(id) { document.getElementById(id).style.display = 'none'; /* אפשר לשפר עם שורת משימות */ }
+        function maximizeWindow(id) {
+            const win = document.getElementById(id);
+            if (win.style.width === '100%') {
+                win.style.width = '900px'; win.style.height = '600px'; win.style.top = '50px'; win.style.left = '100px';
+            } else {
+                win.style.width = '100%'; win.style.height = 'calc(100vh - 48px)'; win.style.top = '0'; win.style.left = '0';
+            }
+        }
+
+        // --- שונות (תפריט התחל ושעון) ---
+        function toggleStart(shouldToggle = true) {
+            if (shouldToggle) startMenu.classList.toggle('active');
+            else startMenu.classList.remove('active');
+        }
+        document.addEventListener('click', (e) => {
+            if (!startMenu.contains(e.target) && !document.getElementById('start-btn').contains(e.target)) toggleStart(false);
+        });
         function updateTime() {
             const now = new Date();
             document.getElementById('clock-time').innerText = now.toLocaleTimeString('he-IL', {hour:'2-digit', minute:'2-digit'});
             document.getElementById('clock-date').innerText = now.toLocaleDateString('he-IL', {day:'2-digit', month:'2-digit', year:'numeric'});
         }
-        setInterval(updateTime, 1000);
-        updateTime();
-
+        setInterval(updateTime, 1000); updateTime();
     </script>
 </body>
 </html>
